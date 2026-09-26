@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://retre43571y6"]
+
+[sub_resource type="Gradient" id="Gradient_at0vl"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.8147347, 0.8196517, 0.5169603, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bk7jt"]
+gradient = SubResource("Gradient_at0vl")
+width = 16
+height = 16
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ocnln"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+angle_min = -145.4
+angle_max = 145.40001
+direction = Vector3(0, 0, 0)
+spread = 89.211
+
+[node name="Trail" type="GPUParticles2D" unique_id=772614042]
+texture = SubResource("GradientTexture2D_bk7jt")
+process_material = SubResource("ParticleProcessMaterial_ocnln")

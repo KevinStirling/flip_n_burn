@@ -9,10 +9,26 @@ var thrust_mod: float = 0.0
 var torque_mod: float = 0.0
 var max_speed: float = 1000.0
 var forces_state
+var move_actions: Array[StringName] = [&"up", &"down", &"left", &"right", &"rot_left", &"rot_right"]
+
+@onready var trail: GPUParticles2D = %Trail
+
+
+func _process(delta: float) -> void:
+	# TODO add logic to determine which thrusters to enable based on the input directions
+	for action in move_actions:
+		if Input.is_action_pressed(action):
+			trail.emitting = true
+			return
+	trail.emitting = false
 
 
 func _physics_process(delta: float) -> void:
-	pass
+	if !sleeping:
+		return
+	for action in move_actions:
+		if Input.is_action_just_pressed(action):
+			sleeping = false
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
