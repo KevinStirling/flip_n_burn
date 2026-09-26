@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dvrtyjogwr2k0" path="res://assets/texture_08.png" id="2_qca6q"]
 [ext_resource type="Script" uid="uid://dy0mbu1cu1oqa" path="res://scripts/background.gd" id="3_2loec"]
 [ext_resource type="Script" uid="uid://bh3b6eyb4rpch" path="res://scripts/ship.gd" id="4_jbd4l"]
-[ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Trail.tscn" id="5_fu3ou"]
+[ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Thruster.tscn" id="5_fu3ou"]
 [ext_resource type="PackedScene" uid="uid://c0kvucpgu4wqk" path="res://scenes/Rock.tscn" id="6_bhwsq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8uh7m"]
@@ -33,11 +33,6 @@ script = ExtResource("3_2loec")
 gravity_scale = 0.0
 script = ExtResource("4_jbd4l")
 
-[node name="Trail" parent="Ship" unique_id=883760882 instance=ExtResource("5_fu3ou")]
-unique_name_in_owner = true
-position = Vector2(-110, 2)
-emitting = false
-
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ship" unique_id=108488220]
 polygon = PackedVector2Array(-100, -40, 99, -40, 139, -4, 139, 8, 100, 41, -100, 41)
 
@@ -48,14 +43,56 @@ polygon = PackedVector2Array(-100, -40, 99, -40, 139, -5, 139, 8, 100, 41, -100,
 [node name="Camera2D" type="Camera2D" parent="Ship" unique_id=1988834930]
 zoom = Vector2(0.5, 0.5)
 
+[node name="T_rear" parent="Ship" unique_id=883760882 instance=ExtResource("5_fu3ou")]
+position = Vector2(-107, -1)
+rotation = 3.1415927
+
+[node name="T_front" parent="Ship" unique_id=772614042 instance=ExtResource("5_fu3ou")]
+position = Vector2(141, 2)
+
+[node name="T_top" parent="Ship" unique_id=1641734873 instance=ExtResource("5_fu3ou")]
+position = Vector2(13, -41)
+rotation = -1.5707964
+
+[node name="T_bottom" parent="Ship" unique_id=655448747 instance=ExtResource("5_fu3ou")]
+position = Vector2(11, 43)
+rotation = 1.5707964
+
+[node name="RCS_nose_cw" parent="Ship" unique_id=626671800 instance=ExtResource("5_fu3ou")]
+position = Vector2(90, -41)
+rotation = -1.5707964
+role = 1
+
+[node name="RCS_tail_cw" parent="Ship" unique_id=66406375 instance=ExtResource("5_fu3ou")]
+position = Vector2(-63, 40)
+rotation = 1.5707964
+role = 1
+
+[node name="RCS_tail_ccw" parent="Ship" unique_id=1613530035 instance=ExtResource("5_fu3ou")]
+position = Vector2(-61, -39)
+rotation = -1.5707964
+role = 1
+
+[node name="RCS_nose_ccw" parent="Ship" unique_id=1857456292 instance=ExtResource("5_fu3ou")]
+position = Vector2(90, 42)
+rotation = 1.5707964
+role = 1
+
 [node name="Rock" parent="." unique_id=251278076 instance=ExtResource("6_bhwsq")]
 position = Vector2(551, -291)
+rotation = -2.7829535
 
 [node name="Rock2" parent="." unique_id=1397971560 instance=ExtResource("6_bhwsq")]
 position = Vector2(63, 486)
+rotation = 0.78023463
 
 [node name="Rock3" parent="." unique_id=511698142 instance=ExtResource("6_bhwsq")]
 position = Vector2(923, 478)
 
 [node name="Rock4" parent="." unique_id=841197311 instance=ExtResource("6_bhwsq")]
 position = Vector2(-426, -512)
+rotation = 0.7992653
+
+[node name="Rock5" parent="." unique_id=1692790062 instance=ExtResource("6_bhwsq")]
+position = Vector2(-684, 345)
+rotation = -0.98735976
