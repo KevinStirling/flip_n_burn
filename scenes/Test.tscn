@@ -41,7 +41,6 @@ color = Color(0.28803682, 0.6277023, 0.36773145, 1)
 polygon = PackedVector2Array(-100, -40, 99, -40, 139, -5, 139, 8, 100, 41, -100, 41)
 
 [node name="Camera2D" type="Camera2D" parent="Ship" unique_id=1988834930]
-zoom = Vector2(0.5, 0.5)
 
 [node name="T_rear" parent="Ship" unique_id=883760882 instance=ExtResource("5_fu3ou")]
 position = Vector2(-107, -1)
@@ -79,20 +78,20 @@ rotation = 1.5707964
 role = 1
 
 [node name="Rock" parent="." unique_id=251278076 instance=ExtResource("6_bhwsq")]
-position = Vector2(551, -291)
+position = Vector2(265, -218)
 rotation = -2.7829535
 
 [node name="Rock2" parent="." unique_id=1397971560 instance=ExtResource("6_bhwsq")]
-position = Vector2(63, 486)
+position = Vector2(59.000015, 229)
 rotation = 0.78023463
 
 [node name="Rock3" parent="." unique_id=511698142 instance=ExtResource("6_bhwsq")]
-position = Vector2(923, 478)
+position = Vector2(287, 89)
 
 [node name="Rock4" parent="." unique_id=841197311 instance=ExtResource("6_bhwsq")]
-position = Vector2(-426, -512)
+position = Vector2(-161, -154)
 rotation = 0.7992653
 
 [node name="Rock5" parent="." unique_id=1692790062 instance=ExtResource("6_bhwsq")]
-position = Vector2(-684, 345)
+position = Vector2(-226, 121.00003)
 rotation = -0.98735976
