@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://l4kjmkc3cgsc"]
+
+[ext_resource type="Script" uid="uid://drg2jcmdlwd7y" path="res://tests/trailtest.gd" id="1_ulagu"]
+
+[node name="TrailTest" type="Node2D" unique_id=1295085110]
+script = ExtResource("1_ulagu")
