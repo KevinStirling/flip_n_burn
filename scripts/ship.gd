@@ -28,9 +28,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		state.apply_central_impulse(Vector2((BASE_THRUST + thrust_mod), 0))
 
 	if Input.is_action_pressed("rot_right"):
-		state.apply_torque_impulse(-(BASE_TORQUE + torque_mod))
+		state.apply_torque_impulse((BASE_TORQUE + torque_mod))
 	if Input.is_action_pressed("rot_left"):
-		state.apply_torque_impulse(BASE_TORQUE + torque_mod)
+		state.apply_torque_impulse(-(BASE_TORQUE + torque_mod))
 
 	if SPEED_LIMITTER:
 		state.linear_velocity = state.linear_velocity.limit_length(max_speed)
