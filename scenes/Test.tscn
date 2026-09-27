@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bh3b6eyb4rpch" path="res://scripts/ship.gd" id="4_jbd4l"]
 [ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Thruster.tscn" id="5_fu3ou"]
 [ext_resource type="PackedScene" uid="uid://c0kvucpgu4wqk" path="res://scenes/Rock.tscn" id="6_bhwsq"]
+[ext_resource type="PackedScene" uid="uid://dkg5hmo7ttiw1" path="res://scenes/Mount.tscn" id="7_qca6q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8uh7m"]
 shader = ExtResource("1_amo3t")
@@ -27,6 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("3_2loec")
 
 [node name="Ship" type="RigidBody2D" parent="." unique_id=1812203636]
@@ -77,6 +79,10 @@ position = Vector2(90, 42)
 rotation = 1.5707964
 role = 1
 
+[node name="Mount" parent="Ship" unique_id=635412626 instance=ExtResource("7_qca6q")]
+position = Vector2(137, 2)
+rotation = 1.5707964
+
 [node name="Rock" parent="." unique_id=251278076 instance=ExtResource("6_bhwsq")]
 position = Vector2(265, -218)
 rotation = -2.7829535
@@ -95,3 +101,18 @@ rotation = 0.7992653
 [node name="Rock5" parent="." unique_id=1692790062 instance=ExtResource("6_bhwsq")]
 position = Vector2(-226, 121.00003)
 rotation = -0.98735976
+
+[node name="Station" type="StaticBody2D" parent="." unique_id=563440380]
+position = Vector2(641, 9)
+
+[node name="Polygon2D" type="Polygon2D" parent="Station" unique_id=223913134]
+color = Color(0.17883888, 0.5372504, 0.8065129, 1)
+polygon = PackedVector2Array(3, 143, 389, 143, 389, -176, -2, -176, -2, -115, 137, -115, 137, -24, 78, -24, 78, 3, 137, 3, 137, 87, 3, 87)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Station" unique_id=992030637]
+polygon = PackedVector2Array(3, 143, 389, 143, 389, -176, -2, -176, -2, -115, 137, -115, 137, -24, 78, -24, 78, 3, 137, 3, 137, 87, 3, 87)
+
+[node name="Mount" parent="Station" unique_id=111485324 instance=ExtResource("7_qca6q")]
+position = Vector2(78, -11)
+rotation = -1.5707964
+location = 1

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dkg5hmo7ttiw1"]
+
+[ext_resource type="Script" uid="uid://bre5fonjag7be" path="res://scripts/mount_point.gd" id="1_y3foi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpnm8"]
+size = Vector2(84, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bk7jt"]
+size = Vector2(44, 26)
+
+[node name="Mount" type="Node2D" unique_id=635412626]
+script = ExtResource("1_y3foi")
+
+[node name="MountPoint" type="Polygon2D" parent="." unique_id=663416078]
+unique_name_in_owner = true
+position = Vector2(0, 5.9604645e-07)
+color = Color(0.8294225, 0.34291208, 0.30296946, 1)
+polygon = PackedVector2Array(-9, -3.0000005, 9, -3.0000005, 9, 2.9999995, -9, 2.9999995)
+
+[node name="MountRadius" type="Area2D" parent="." unique_id=420727267]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MountRadius" unique_id=98897410]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_wpnm8")
+
+[node name="IndicatorLinePoint" type="Marker2D" parent="." unique_id=1590231510]
+unique_name_in_owner = true
+
+[node name="HoverRadius" type="Area2D" parent="." unique_id=1301650152]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoverRadius" unique_id=199232223]
+shape = SubResource("RectangleShape2D_bk7jt")
