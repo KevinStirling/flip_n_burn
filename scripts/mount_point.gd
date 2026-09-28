@@ -8,6 +8,7 @@ enum Location { SHIP, STATION, WEAPON }
 @export var location: Location = Location.SHIP
 @export var highlight_color: Color = Color.WHITE
 @export var mouseover_color: Color = Color.GREEN
+@export var dock_gap: float = 0.0
 
 var in_range: bool = false
 var _ship: Ship
@@ -46,6 +47,17 @@ func _draw() -> void:
 			Color.GREEN,
 			2.0,
 		)
+
+
+## world transfor the must much reach to mount the statsion. uses dock_gap
+## to prevent unwanted physics collisions with the dock
+## TODO can remove dock_gap by just making the mounting point on a seperate layer
+func dock_target_for(ship_mount: MountPoint) -> Transform2D:
+	var ship := ship_mount._ship
+	var mount_local := ship.global_transform.affine_inverse() * ship_mount.global_transform
+	return global_transform \
+			* Transform2D(PI, Vector2(0, -dock_gap)) \
+			* mount_local.affine_inverse()
 
 
 func mouse_exited() -> void:

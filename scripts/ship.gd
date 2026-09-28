@@ -16,7 +16,7 @@ var spin_direction: float = 0.0
 var move_actions: Array[StringName] = [&"up", &"down", &"left", &"right", &"rot_left", &"rot_right"]
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	thrust_direction = Vector2(
 		Input.get_axis(&"left", &"right"),
 		Input.get_axis(&"up", &"down"),
@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 	spin_direction = Input.get_axis(&"rot_left", &"rot_right")
 
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not sleeping:
 		return
 	if thrust_direction != Vector2.ZERO or not is_zero_approx(spin_direction):
