@@ -19,7 +19,7 @@ func _ready() -> void:
 	emitting = false
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _ship == null:
 		return
 	emitting = _wants_translation() if role == Role.TRANSLATION else _wants_rotation()
@@ -37,7 +37,10 @@ func _wants_translation() -> bool:
 	# this nodes local rotation is the exhaust direction. thruster pushes
 	# opposite of the exhuast direction, so we check if the want direction
 	# is opposite of the exhause direction.
-	return _exhuast.dot(-local_want) >= activation
+	# TODO: use local_want.length() with GPUParticles2D amount_ratio to
+	# control the amount of particles emitted based on variable thrust
+	# amount? would only work for controller input but might be nice
+	return _exhuast.dot(-local_want.normalized()) >= activation
 
 
 func _wants_rotation() -> bool:
