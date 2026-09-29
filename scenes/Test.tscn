@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dvrtyjogwr2k0" path="res://assets/texture_08.png" id="2_qca6q"]
 [ext_resource type="Script" uid="uid://dy0mbu1cu1oqa" path="res://scripts/background.gd" id="3_2loec"]
 [ext_resource type="Script" uid="uid://bh3b6eyb4rpch" path="res://scripts/ship.gd" id="4_jbd4l"]
+[ext_resource type="Script" uid="uid://sop4w15jklbi" path="res://scripts/docking_autopilot.gd" id="5_2loec"]
 [ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Thruster.tscn" id="5_fu3ou"]
 [ext_resource type="PackedScene" uid="uid://c0kvucpgu4wqk" path="res://scenes/Rock.tscn" id="6_bhwsq"]
 [ext_resource type="PackedScene" uid="uid://dkg5hmo7ttiw1" path="res://scenes/Mount.tscn" id="7_qca6q"]
@@ -32,8 +33,13 @@ mouse_filter = 2
 script = ExtResource("3_2loec")
 
 [node name="Ship" type="RigidBody2D" parent="." unique_id=1812203636]
+position = Vector2(432, -73)
 gravity_scale = 0.0
 script = ExtResource("4_jbd4l")
+
+[node name="DockingAutopilot" type="Node2D" parent="Ship" unique_id=830539837]
+script = ExtResource("5_2loec")
+approach_speed = 80.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ship" unique_id=108488220]
 polygon = PackedVector2Array(-100, -40, 99, -40, 139, -4, 139, 8, 100, 41, -100, 41)
@@ -103,8 +109,7 @@ position = Vector2(-226, 121.00003)
 rotation = -0.98735976
 
 [node name="Station" type="StaticBody2D" parent="." unique_id=563440380]
-position = Vector2(771, -2.999999)
-rotation = -1.5695834
+position = Vector2(641, 9)
 
 [node name="Polygon2D" type="Polygon2D" parent="Station" unique_id=223913134]
 color = Color(0.17883888, 0.5372504, 0.8065129, 1)

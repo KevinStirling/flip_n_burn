@@ -34,6 +34,7 @@ func _ready() -> void:
 	mount_radius.area_exited.connect(exit_mount_radius)
 	hover_radius.mouse_entered.connect(mouse_entered)
 	hover_radius.mouse_exited.connect(mouse_exited)
+	hover_radius.input_event.connect(_on_hover_input)
 
 
 func _process(_delta: float) -> void:
@@ -107,6 +108,25 @@ func exit_mount_radius(area: Area2D) -> void:
 	in_range = false
 	if location == Location.STATION:
 		mount_point.color = _default_color
+
+
+func _on_hover_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if location != Location.STATION or not in_range or _obj_in_radius == null:
+		return
+	if not (event is InputEventMouseButton):
+		return
+	if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
+		return
+
+	var ship: Ship = _obj_in_radius._ship
+	if ship == null:
+		return
+
+	if ship.autopilot.phase == DockingAutopilot.Phase.IDLE:
+		ship.autopilot.engage(_obj_in_radius, self)
+	else:
+		ship.autopilot.disengage() # click again to cancel or undock, probably want to change this later
+		get_viewport().set_input_as_handled()
 
 
 func _ghost_points(ship: Ship) -> PackedVector2Array:

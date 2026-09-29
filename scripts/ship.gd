@@ -14,9 +14,17 @@ var forces_state
 var thrust_direction: Vector2 = Vector2.ZERO
 var spin_direction: float = 0.0
 var move_actions: Array[StringName] = [&"up", &"down", &"left", &"right", &"rot_left", &"rot_right"]
+var control_mode: ControlMode = ControlMode.MANUAL
+
+@onready var autopilot: DockingAutopilot = $DockingAutopilot
 
 
 func _process(_delta: float) -> void:
+	if control_mode == ControlMode.AUTOPILOT:
+		if not _manual_override():
+			return
+		autopilot.disengage()
+
 	thrust_direction = Vector2(
 		Input.get_axis(&"left", &"right"),
 		Input.get_axis(&"up", &"down"),
@@ -29,6 +37,13 @@ func _physics_process(_delta: float) -> void:
 		return
 	if thrust_direction != Vector2.ZERO or not is_zero_approx(spin_direction):
 		sleeping = false
+
+
+func _manual_override() -> bool:
+	for action in move_actions:
+		if Input.is_action_just_pressed(action):
+			return true
+	return false
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
