@@ -103,7 +103,8 @@ position = Vector2(-226, 121.00003)
 rotation = -0.98735976
 
 [node name="Station" type="StaticBody2D" parent="." unique_id=563440380]
-position = Vector2(641, 9)
+position = Vector2(771, -2.999999)
+rotation = -1.5695834
 
 [node name="Polygon2D" type="Polygon2D" parent="Station" unique_id=223913134]
 color = Color(0.17883888, 0.5372504, 0.8065129, 1)

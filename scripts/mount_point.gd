@@ -9,6 +9,7 @@ enum Location { SHIP, STATION, WEAPON }
 @export var highlight_color: Color = Color.WHITE
 @export var mouseover_color: Color = Color.GREEN
 @export var dock_gap: float = 0.0
+@export var debug_docking_ghost_enabled: bool = true
 
 var in_range: bool = false
 var _ship: Ship
@@ -47,6 +48,16 @@ func _draw() -> void:
 			Color.GREEN,
 			2.0,
 		)
+
+		if location != Location.STATION or _obj_in_radius._ship == null:
+			return
+
+		if debug_docking_ghost_enabled:
+			# draw an outline of the ships target position for docking
+			var target := dock_target_for(_obj_in_radius)
+			draw_set_transform_matrix(global_transform.affine_inverse() * target)
+			draw_polyline(_ghost_points(_obj_in_radius._ship), Color(0.2, 1.0, 0.4, 0.45), 1.0)
+			draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
 ## world transfor the must much reach to mount the statsion. uses dock_gap
@@ -96,3 +107,9 @@ func exit_mount_radius(area: Area2D) -> void:
 	in_range = false
 	if location == Location.STATION:
 		mount_point.color = _default_color
+
+
+func _ghost_points(ship: Ship) -> PackedVector2Array:
+	var pts := (ship.get_node("Polygon2D") as Polygon2D).polygon.duplicate()
+	pts.append(pts[0])
+	return pts
