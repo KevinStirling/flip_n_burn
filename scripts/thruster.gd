@@ -48,6 +48,7 @@ func _wants_rotation() -> bool:
 	if spin == 0.0:
 		return false
 
-	var arm = position - _ship.center_of_mass
+	# use com_local for localized com of module
+	var arm = position - _ship.com_local
 	# fancy math to determine the "level arm" from the center of mass
 	return signf(arm.cross(-_exhuast)) == signf(spin)

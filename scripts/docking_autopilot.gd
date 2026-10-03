@@ -12,7 +12,7 @@ enum Phase { IDLE, ALIGN, APPROACH, DOCKED }
 ## Velocity error (px/s) that commands full thrust
 @export var vel_err_full: float = 120.0
 ## Angle error -> desired spin. Units 1/s
-@export var rot_gan: float = 3.0
+@export var rot_gain: float = 3.0
 ## Angular velocity error (rad/s) that commads full torque
 @export var spin_err_full: float = 1.5
 @export var cruise_speed: float = 400.0
@@ -93,7 +93,7 @@ func _steer(setpoint: Vector2, want_rot: float, speed_cap: float) -> void:
 	_ship.thrust_direction = thrust if thrust.length() > 0.05 else Vector2.ZERO
 
 	var ang_err := wrapf(want_rot - _ship.global_rotation, -PI, PI)
-	var desired_spin := clampf(ang_err * rot_gan, -max_spin, max_spin)
+	var desired_spin := clampf(ang_err * rot_gain, -max_spin, max_spin)
 	_ship.spin_direction = clampf(
 		(desired_spin - _ship.angular_velocity) / spin_err_full,
 		-1.0,
@@ -110,6 +110,7 @@ func _capture(target: Transform2D) -> void:
 	_ship.freeze = true
 	_ship.global_transform = target
 	phase = Phase.DOCKED
+	set_physics_process(false)
 	docked.emit(_station_mount)
 
 

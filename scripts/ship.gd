@@ -6,7 +6,11 @@ enum ControlMode { MANUAL, AUTOPILOT }
 @export var SPEED_LIMITTER: bool = false
 @export var BASE_THRUST: float = 5.0
 @export var BASE_TORQUE: float = 150.0
+@export var is_player: bool = false
+@export var silhouette: Polygon2D
 
+# local center of mass
+var com_local: Vector2 = Vector2.ZERO
 var thrust_mod: float = 0.0
 var torque_mod: float = 0.0
 var max_speed: float = 1000.0
@@ -20,6 +24,8 @@ var control_mode: ControlMode = ControlMode.MANUAL
 
 
 func _process(_delta: float) -> void:
+	if not is_player:
+		return
 	if control_mode == ControlMode.AUTOPILOT:
 		if not _manual_override():
 			return
@@ -39,6 +45,10 @@ func _physics_process(_delta: float) -> void:
 		sleeping = false
 
 
+func com_global() -> Vector2:
+	return com_local * global_transform
+
+
 func _manual_override() -> bool:
 	for action in move_actions:
 		if Input.is_action_just_pressed(action):
@@ -47,6 +57,7 @@ func _manual_override() -> bool:
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	com_local = state.center_of_mass_local
 	forces_state = state
 
 	state.apply_central_impulse(thrust_direction * (BASE_THRUST + thrust_mod))

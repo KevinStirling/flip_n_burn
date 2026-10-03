@@ -36,9 +36,11 @@ script = ExtResource("3_2loec")
 position = Vector2(432, -73)
 gravity_scale = 0.0
 script = ExtResource("4_jbd4l")
+is_player = true
 
 [node name="DockingAutopilot" type="Node2D" parent="Ship" unique_id=830539837]
 script = ExtResource("5_2loec")
+standoff = 20.0
 approach_speed = 80.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ship" unique_id=108488220]
@@ -121,4 +123,3 @@ polygon = PackedVector2Array(3, 143, 389, 143, 389, -176, -2, -176, -2, -115, 13
 [node name="Mount" parent="Station" unique_id=111485324 instance=ExtResource("7_qca6q")]
 position = Vector2(78, -11)
 rotation = -1.5707964
-location = 1
