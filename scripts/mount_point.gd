@@ -17,7 +17,6 @@ static var hovered: MountPoint = null
 @export var mouseover_color: Color = Color.GREEN
 @export var dock_gap: float = 0.0
 @export var debug_docking_ghost_enabled: bool = true
-@export var command_range: float = 1500.0
 
 ## derived enum	to describe the type of body the mount point is associated with
 var body_kind: Body:
@@ -30,13 +29,20 @@ var docked_shell: Ship = null
 var _body: PhysicsBody2D # always set
 var _craft: Ship # null if the body is a stationary body (i.e. station)
 var _default_color: Color
-var _obj_in_radius: MountPoint
 var _candidates: Array[MountPoint] = []
 
 @onready var mount_radius: Area2D = %MountRadius
-@onready var mount_point: Polygon2D = %MountPoint
+@onready var marker: Polygon2D = %MountPoint
 @onready var line_point: Marker2D = %IndicatorLinePoint
 @onready var hover_radius: Area2D = %HoverRadius
+
+
+static func pending_pair() -> Array:
+	if not is_instance_valid(selected) or not is_instance_valid(hovered):
+		return []
+	if selected == hovered or not selected._compatible(hovered):
+		return []
+	return resolve_roles(selected, hovered)
 
 
 ## returns [anchor, mover] for an explicitly chosen pair, or [] if neither side can fly.
@@ -61,13 +67,10 @@ static func resolve_roles(first: MountPoint, second: MountPoint) -> Array:
 	return [second, first] # tie: destination is the second click
 
 
-## detect if a mount area enters another mount area
-## determine where each mount is located (if mount parent is ship)
-## if mount area is ship (player ship), and both mounts are airlock, move player ship to non player ship airlock
 func _ready() -> void:
 	add_to_group(&"mount_points")
 	_resolve_body()
-	_default_color = mount_point.color
+	_default_color = marker.color
 	mount_radius.area_entered.connect(enter_mount_radius)
 	mount_radius.area_exited.connect(exit_mount_radius)
 	hover_radius.mouse_entered.connect(mouse_entered)
@@ -76,28 +79,34 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	mount_point.color = _state_color()
+	marker.color = _state_color()
 	queue_redraw()
 
 
 func _draw() -> void:
-	if in_range():
+	var near := nearest_candidate()
+	if near != null:
 		draw_line(
 			to_local(line_point.global_position),
 			to_local(nearest_candidate().line_point.global_position),
 			Color.GREEN,
 			2.0,
 		)
+	if not debug_docking_ghost_enabled:
+		return
 
-		if body_kind != Body.FIXED or _obj_in_radius.body_kind == Body.NONE:
-			return
+	var roles := pending_pair()
+	if roles.is_empty() or roles[0] != self:
+		return
 
-		if debug_docking_ghost_enabled:
-			# draw an outline of the ships target position for docking
-			var target := dock_target_for(_obj_in_radius)
-			draw_set_transform_matrix(global_transform.affine_inverse() * target)
-			draw_polyline(_ghost_points(_obj_in_radius._ship), Color(0.2, 1.0, 0.4, 0.45), 1.0)
-			draw_set_transform_matrix(Transform2D.IDENTITY)
+	var mover: MountPoint = roles[1]
+	if mover._craft == null or mover._craft.silhouette == null:
+		return
+
+	var target := dock_target_for(mover)
+	draw_set_transform_matrix(global_transform.affine_inverse() * target)
+	draw_polyline(_ghost_points(mover._craft.silhouette), Color(0.2, 1.0, 0.4, 0.45), 1.0)
+	draw_set_transform_matrix(Transform2D.IDENTITY)
 
 
 ## _resolve_body when node is reparented (dock / undocked)
@@ -110,9 +119,8 @@ func in_range() -> bool:
 	return not _candidates.is_empty()
 
 
-## world transfor the must much reach to mount the statsion. uses dock_gap
-## to prevent unwanted physics collisions with the dock
-## TODO can remove dock_gap by just making the mounting point on a seperate layer
+## world transform move_mount's body must reach for its mount to sit
+## the amount of dock_gap off this mount, while facing it
 func dock_target_for(mover_mount: MountPoint) -> Transform2D:
 	var ship := mover_mount._craft
 	var mount_local := ship.global_transform.affine_inverse() * mover_mount.global_transform
@@ -138,16 +146,11 @@ func nearest_candidate() -> MountPoint:
 func mouse_exited() -> void:
 	if body_kind != Body.FIXED:
 		return
-	mount_point.color = highlight_color
-	if !in_range():
-		mount_point.color = _default_color
 
 
 func mouse_entered() -> void:
 	if body_kind != Body.FIXED:
 		return
-	if in_range():
-		mount_point.color = mouseover_color
 
 
 func enter_mount_radius(area: Area2D) -> void:
@@ -156,7 +159,6 @@ func enter_mount_radius(area: Area2D) -> void:
 		return
 	if not _candidates.has(other):
 		_candidates.append(other)
-	mount_point.color = highlight_color
 
 
 func exit_mount_radius(area: Area2D) -> void:
@@ -164,8 +166,14 @@ func exit_mount_radius(area: Area2D) -> void:
 	if other == null:
 		return
 	_candidates.erase(other)
-	if _candidates.is_empty():
-		mount_point.color = _default_color
+
+
+## toggle the mount_radius area2d's to prevent unwanted event firing when docked
+func set_dock_sensing(enabled: bool) -> void:
+	mount_radius.monitoring = enabled
+	mount_radius.monitorable = enabled
+	if not enabled:
+		_candidates.clear()
 
 
 func _is_player() -> bool:
@@ -184,7 +192,7 @@ func _state_color() -> Color:
 
 func _compatible(other: MountPoint) -> bool:
 	if other._body == _body:
-		return false # own hull - see below
+		return false # own hull
 	if docked_to != null or other.docked_to != null:
 		return false # already mated
 	return other.mount == mount # airlock<->airlock, hardpoint<->hardpoint
@@ -192,11 +200,7 @@ func _compatible(other: MountPoint) -> bool:
 
 func _resolve_body() -> void:
 	_body = get_parent() as PhysicsBody2D
-	_craft = _body.get_parent() as Ship
-
-
-func _can_maneuver() -> bool:
-	return _craft != null and _craft.autopilot != null
+	_craft = _body as Ship
 
 
 func _on_hover_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -243,7 +247,7 @@ func _live_autopilot() -> DockingAutopilot:
 	return shell.autopilot if shell != null else null
 
 
-func _ghost_points(ship: Ship) -> PackedVector2Array:
-	var pts := (ship.get_node("Polygon2D") as Polygon2D).polygon.duplicate()
+func _ghost_points(silhouette: Polygon2D) -> PackedVector2Array:
+	var pts := silhouette.polygon.duplicate()
 	pts.append(pts[0])
 	return pts

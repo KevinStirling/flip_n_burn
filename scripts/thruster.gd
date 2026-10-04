@@ -36,7 +36,7 @@ func _wants_translation() -> bool:
 
 	# this nodes local rotation is the exhaust direction. thruster pushes
 	# opposite of the exhuast direction, so we check if the want direction
-	# is opposite of the exhause direction.
+	# is opposite of the exhaust direction.
 	# TODO: use local_want.length() with GPUParticles2D amount_ratio to
 	# control the amount of particles emitted based on variable thrust
 	# amount? would only work for controller input but might be nice
@@ -50,5 +50,5 @@ func _wants_rotation() -> bool:
 
 	# use com_local for localized com of module
 	var arm = position - _ship.com_local
-	# fancy math to determine the "level arm" from the center of mass
+	# fancy math to determine the "lever arm" from the center of mass
 	return signf(arm.cross(-_exhuast)) == signf(spin)

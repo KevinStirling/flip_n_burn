@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dyceylrbe0lu7"]
+
+[ext_resource type="Script" uid="uid://bh3b6eyb4rpch" path="res://scripts/ship.gd" id="1_d5fem"]
+[ext_resource type="PackedScene" uid="uid://drmvgw7cl5oe" path="res://scenes/DockingAutopilot.tscn" id="2_62fpe"]
+[ext_resource type="PackedScene" uid="uid://dkg5hmo7ttiw1" path="res://scenes/Mount.tscn" id="3_celxj"]
+[ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Thruster.tscn" id="4_62fpe"]
+
+[node name="Module" type="RigidBody2D" unique_id=824166305 node_paths=PackedStringArray("silhouette")]
+gravity_scale = 0.0
+script = ExtResource("1_d5fem")
+silhouette = NodePath("Polygon2D")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=952350040]
+polygon = PackedVector2Array(-30, -15, 30, -15, 30, 15, -30, 15)
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1339072115]
+polygon = PackedVector2Array(-30, -15, 30, -15, 30, 15, -30, 15)
+
+[node name="DockingAutopilot" parent="." unique_id=1645198681 instance=ExtResource("2_62fpe")]
+
+[node name="Mount" parent="." unique_id=635412626 instance=ExtResource("3_celxj")]
+position = Vector2(30, 0)
+rotation = 1.5707964
+mount = 1
+
+[node name="T_top" parent="." unique_id=772614042 instance=ExtResource("4_62fpe")]
+position = Vector2(0, -15)
+rotation = -1.5707964
+
+[node name="T_bottom" parent="." unique_id=1112854302 instance=ExtResource("4_62fpe")]
+position = Vector2(0, 15)
+
+[node name="T_rear" parent="." unique_id=1921890894 instance=ExtResource("4_62fpe")]
+position = Vector2(-30, 0)
+rotation = 3.1415927
+
+[node name="T_front" parent="." unique_id=382661416 instance=ExtResource("4_62fpe")]
+position = Vector2(30, 0)
+
+[node name="RCS_nose_cw" parent="." unique_id=2080766837 instance=ExtResource("4_62fpe")]
+position = Vector2(23, -15)
+rotation = -1.5707964
+role = 1
+
+[node name="RCS_tail_cw" parent="." unique_id=1330515543 instance=ExtResource("4_62fpe")]
+position = Vector2(-21, 15)
+rotation = 1.5707964
+role = 1
+
+[node name="RCS_nose_ccw" parent="." unique_id=1842119577 instance=ExtResource("4_62fpe")]
+position = Vector2(23, 15)
+rotation = 1.5707964
+role = 1
+
+[node name="RCS_tail_ccw" parent="." unique_id=258996134 instance=ExtResource("4_62fpe")]
+position = Vector2(-21, -15)
+rotation = -1.5707964
+role = 1

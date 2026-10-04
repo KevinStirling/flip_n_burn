@@ -11,14 +11,21 @@ enum ControlMode { MANUAL, AUTOPILOT }
 
 # local center of mass
 var com_local: Vector2 = Vector2.ZERO
+# mods for thrusters. altering these will effect thruster output
 var thrust_mod: float = 0.0
 var torque_mod: float = 0.0
+# max_speed used it SPEED_LIMITTER enabled
 var max_speed: float = 1000.0
-var forces_state
 var thrust_direction: Vector2 = Vector2.ZERO
 var spin_direction: float = 0.0
 var move_actions: Array[StringName] = [&"up", &"down", &"left", &"right", &"rot_left", &"rot_right"]
 var control_mode: ControlMode = ControlMode.MANUAL
+# docked_* holds record of what has been reparented.
+# set by DockLink.merge on the shell. the records `split` requires to undo a dock 
+var docked_anchor: PhysicsBody2D
+var docked_home: Node
+var docked_children: Array[Node] = []
+var docked_mass_contribution: float = 0.0
 
 @onready var autopilot: DockingAutopilot = $DockingAutopilot
 
@@ -58,7 +65,6 @@ func _manual_override() -> bool:
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	com_local = state.center_of_mass_local
-	forces_state = state
 
 	state.apply_central_impulse(thrust_direction * (BASE_THRUST + thrust_mod))
 	state.apply_torque_impulse(spin_direction * (BASE_TORQUE + torque_mod))

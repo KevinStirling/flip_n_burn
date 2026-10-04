@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://retre43571y6" path="res://scenes/Thruster.tscn" id="5_fu3ou"]
 [ext_resource type="PackedScene" uid="uid://c0kvucpgu4wqk" path="res://scenes/Rock.tscn" id="6_bhwsq"]
 [ext_resource type="PackedScene" uid="uid://dkg5hmo7ttiw1" path="res://scenes/Mount.tscn" id="7_qca6q"]
+[ext_resource type="PackedScene" uid="uid://dyceylrbe0lu7" path="res://scenes/Module.tscn" id="9_jbd4l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8uh7m"]
 shader = ExtResource("1_amo3t")
@@ -32,11 +33,12 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("3_2loec")
 
-[node name="Ship" type="RigidBody2D" parent="." unique_id=1812203636]
+[node name="Ship" type="RigidBody2D" parent="." unique_id=1812203636 node_paths=PackedStringArray("silhouette")]
 position = Vector2(432, -73)
 gravity_scale = 0.0
 script = ExtResource("4_jbd4l")
 is_player = true
+silhouette = NodePath("Polygon2D")
 
 [node name="DockingAutopilot" type="Node2D" parent="Ship" unique_id=830539837]
 script = ExtResource("5_2loec")
@@ -91,6 +93,10 @@ role = 1
 position = Vector2(137, 2)
 rotation = 1.5707964
 
+[node name="Mount2" parent="Ship" unique_id=1644405366 instance=ExtResource("7_qca6q")]
+position = Vector2(-20, -40)
+mount = 1
+
 [node name="Rock" parent="." unique_id=251278076 instance=ExtResource("6_bhwsq")]
 position = Vector2(265, -218)
 rotation = -2.7829535
@@ -123,3 +129,15 @@ polygon = PackedVector2Array(3, 143, 389, 143, 389, -176, -2, -176, -2, -115, 13
 [node name="Mount" parent="Station" unique_id=111485324 instance=ExtResource("7_qca6q")]
 position = Vector2(78, -11)
 rotation = -1.5707964
+
+[node name="Module" parent="." unique_id=824166305 instance=ExtResource("9_jbd4l")]
+position = Vector2(281.99997, -331.99997)
+rotation = -0.49710047
+
+[node name="Module2" parent="." unique_id=211223729 instance=ExtResource("9_jbd4l")]
+position = Vector2(504, -353)
+rotation = -1.0765038
+
+[node name="Module3" parent="." unique_id=2102885281 instance=ExtResource("9_jbd4l")]
+position = Vector2(435, -462)
+rotation = 1.8042959

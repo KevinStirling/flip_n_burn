@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://drmvgw7cl5oe"]
+
+[ext_resource type="Script" uid="uid://sop4w15jklbi" path="res://scripts/docking_autopilot.gd" id="1_5fesh"]
+
+[node name="DockingAutopilot" type="Node2D" unique_id=1645198681]
+script = ExtResource("1_5fesh")
+standoff = 50.0
